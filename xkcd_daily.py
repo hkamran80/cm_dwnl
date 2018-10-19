@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 
-PATH_TO_XKCD_FOLDER = ""
+xkcd_folder = ""
 
 def download_file(url, location, filename=""):
     local_filename = url.split('/')[-1] if filename == "" else filename
@@ -17,7 +17,7 @@ def download_file(url, location, filename=""):
 
     return local_filename
 
-if PATH_TO_XKCD_FOLDER != "":
+if xkcd_folder != "":
     xkcd_page = BeautifulSoup(requests.get("https://xkcd.com").text, "html.parser")
     img_src = xkcd_page.select("div#middleContainer > div#comic > img")[0]["src"].replace("//", "https://")
     img_num = xkcd_page.select("div#middleContainer")[0].text.split("\n")[20].split(" ")[-1].replace("https://xkcd.com/", "").replace("/", "")
@@ -25,8 +25,8 @@ if PATH_TO_XKCD_FOLDER != "":
 
     print("Downloading XKCD {}...".format(img_num))
 
-    download_file(img_src, PATH_TO_XKCD_FOLDER, filename="{}.{}".format(img_num, img_ext))
+    download_file(img_src, xkcd_folder, filename="{}.{}".format(img_num, img_ext))
 
     print("Download completed!")
 else:
-    print("You must set the PATH_TO_XKCD_FOLDER variable first!")
+    print("You must set the \"xkcd_folder\" variable first!")
