@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import requests
 import re
 
+PATH_TO_XKCD_FOLDER = ""
+
 def download_file(url, location, filename=""):
     local_filename = url.split('/')[-1] if filename == "" else filename
     
@@ -15,13 +17,16 @@ def download_file(url, location, filename=""):
 
     return local_filename
 
-xkcd_page = BeautifulSoup(requests.get("https://xkcd.com").text, "html.parser")
-img_src = xkcd_page.select("div#middleContainer > div#comic > img")[0]["src"].replace("//", "https://")
-img_num = xkcd_page.select("div#middleContainer")[0].text.split("\n")[20].split(" ")[-1].replace("https://xkcd.com/", "").replace("/", "")
-img_ext = img_src.split(".")[-1]
+if PATH_TO_XKCD_FOLDER != "":
+    xkcd_page = BeautifulSoup(requests.get("https://xkcd.com").text, "html.parser")
+    img_src = xkcd_page.select("div#middleContainer > div#comic > img")[0]["src"].replace("//", "https://")
+    img_num = xkcd_page.select("div#middleContainer")[0].text.split("\n")[20].split(" ")[-1].replace("https://xkcd.com/", "").replace("/", "")
+    img_ext = img_src.split(".")[-1]
 
-print("Downloading XKCD {}...".format(img_num))
+    print("Downloading XKCD {}...".format(img_num))
 
-download_file(img_src, "/Users/hkamran/Desktop/Desktop/Images/comics/XKCD/", filename="{}.{}".format(img_num, img_ext))
+    download_file(img_src, PATH_TO_XKCD_FOLDER, filename="{}.{}".format(img_num, img_ext))
 
-print("Download completed!")
+    print("Download completed!")
+else:
+    print("You must set the PATH_TO_XKCD_FOLDER variable first!")
